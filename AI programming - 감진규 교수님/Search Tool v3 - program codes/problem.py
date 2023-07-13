@@ -1,10 +1,12 @@
 import math
 import random
-
+from setup import Setup
 # interface 제공
 class Problem:
     def __init__(self):
         #_붙여주면 private과 비슷한 역할
+        # 최상위 class에서 상속 받음
+        Setup.__init__(self)
         self._solution = []
         self._value = 0
         self._numEval = 0
@@ -33,10 +35,9 @@ class Numeric(Problem):
         Problem.__init__(self)
         self._expression = ''
         self._domain = []
-        self._delta = 0.01
-        
-        self._alpha = 0.01
-        self._dx = 10 ** (-4)
+#        self._delta = 0.01 (setup.py에서 넘겨 받음(최상위 class))     
+#        self._alpha = 0.01
+#        self._dx = 10 ** (-4)
 
     def getDelta(self):
         return self._delta   

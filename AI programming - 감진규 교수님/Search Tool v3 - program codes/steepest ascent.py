@@ -5,7 +5,7 @@ def main():
     p = Numeric()
     p.setVariables()   # 'p': (expr, domain)
     # Call the search algorithm
-    solution, minimum = gradientDescent(p)
+    solution, minimum = steepestAscent(p)
     # Show the problem and algorithm settings
     p.storeResult(solution, minimum)
     p.describe()
@@ -13,12 +13,12 @@ def main():
     # Report results
     p.report()
 
-def gradientDescent(p):
+def steepestAscent(p):
     current = p.randomInit() # 'current' is a list of random values
     valueC = p.evaluate(current)
     while True:
-        successor = p.takeStep(current, valueC)
-        valueS = p.evaluate(successor)
+        neighbors = p.mutants(current)
+        successor, valueS = bestOf(neighbors, p)
         if valueS >= valueC:
             break
         else:
@@ -26,10 +26,21 @@ def gradientDescent(p):
             valueC = valueS
     return current, valueC
 
+def bestOf(neighbors, p): ###
+    best = neighbors[0]
+    bestValue = p.evaluate(best)
+    for i in range(1,len(neighbors)):
+        newValue = p.evaluate(neighbors[i])
+        if newValue < bestValue:
+            best = neighbors[i]
+            bestValue = newValue
+                         
+    return best, bestValue
+
 def displaySetting(p):
     print()
-    print("Search algorithm: Gradient-descent Hill Climbing")
+    print("Search algorithm: First-Choice Hill Climbing")
     print()
-    print("step size:", p.getAlpha())
+    print("Mutation step size:", p.getDelta())
 
 main()
